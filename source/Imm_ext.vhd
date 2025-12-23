@@ -17,7 +17,10 @@ architecture rtl of Imm_ext is
     alias imm_I    : std_logic_vector(11 downto 0) is instr(31 downto 20);
     signal temp : std_logic_vector(19 downto 0);
 begin
-    temp <= (others => instr(31));
+
+    -- Si BLTU ou BGEU alors remplit le début de instr par des 0 car unsigned
+    temp <= (others => '0') when (instr(13)='1' and insType(1) = '1') else (others => instr(31));
+
     with insType select
         immExt <= temp & imm_I when "00",
                   temp & instr(31 downto 25) & instr(11 downto 7) when "01",
