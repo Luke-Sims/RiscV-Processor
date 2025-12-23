@@ -5,8 +5,7 @@
 
 GHDL=ghdl
 BUILD=build
-TB_FILE=tb_Imm_ext
-
+TB_FILE=tb_LM
 GHDLFLAGS= --workdir=$(BUILD)
 GHDLRUNFLAGS= --wave=sim/$(TB_FILE).ghw
 
@@ -26,7 +25,7 @@ $(TB_FILE): $(TARGET)
 
 # Run target
 run: $(TB_FILE)
-	$(GHDL) -r $(BUILD)/$(TB_FILE) $(GHDLRUNFLAGS)
+	$(GHDL) -r $(TB_FILE) $(GHDLRUNFLAGS)
 
 # Launch simulation
 sim: sim/$(TB_FILE).ghw
@@ -34,7 +33,7 @@ sim: sim/$(TB_FILE).ghw
 
 # Clean build and simulation files
 clean:
-	rm build/* sim/*
+	rm build/* sim/* tb_*
 
 # Targets to analyze files
 /usr/lib/ghdl/ieee/v93/std_logic_1164.o: /usr/lib/ghdl/ieee/v93/../../src/ieee/v93/std_logic_1164.vhdl
