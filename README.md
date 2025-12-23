@@ -12,4 +12,4 @@ simulation: `make sim`
 - Testbench (fichiers de test)
 
 Bonne lecture :)
-Lucas
+LukeSim
