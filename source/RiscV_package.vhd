@@ -42,7 +42,8 @@ package RiscV_package is
     		LM_instr    : out std_logic_vector(2 downto 0);
     		insType     : out std_logic_vector(1 downto 0);
     		SM_instr    : out std_logic_vector(1 downto 0);
-    		Btype       : out std_logic_vector(2 downto 0)
+    		Btype       : out std_logic_vector(2 downto 0);
+            Bsel        : out std_logic
     	);
     end component;
 
@@ -174,6 +175,32 @@ package RiscV_package is
             funct3   : in std_logic_vector(1 downto 0);
             q        : in std_logic_vector(N-1 downto 0);
             data_out : out std_logic_vector(N-1 downto 0)
+        );
+    end component;
+
+    component BC is
+    	generic
+    	(
+    		N : natural := 32
+    	);
+    	port
+    	(
+    		busA	: in  std_logic_vector((N -1) downto 0);
+    		busB	: in  std_logic_vector((N -1) downto 0);
+    		Btype	: in  std_logic_vector(2 downto 0);
+    		Bres	: out std_logic
+    	);
+    end component;
+
+    component B_mux is
+        generic(
+            N : natural := 32
+        );
+        port (
+            busA    : in std_logic_vector(N-1 downto 0);
+            dout    : in std_logic_vector(N-1 downto 0);
+            Bsel    : in std_logic;
+            busAout : out std_logic_vector(N-1 downto 0)
         );
     end component;
 end package;

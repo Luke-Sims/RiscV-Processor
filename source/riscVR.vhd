@@ -20,8 +20,9 @@ end entity;
 
 architecture rtl of riscVR is
     signal aluOp_t      : std_logic_vector(3 downto 0);
-    signal opA_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
+    signal opA_in_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal opB_in_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
+    signal opA_out_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal opB_out_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal res_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal instr_t      : std_logic_vector((DATA_WIDTH -1) downto 0);
@@ -42,15 +43,16 @@ architecture rtl of riscVR is
     signal SM_instr_t   : std_logic_vector(1 downto 0);
     signal Btype_t      : std_logic_vector(2 downto 0);
     signal Bres_t       : std_logic;
+    signal Bsel_t       : std_logic;
 
-    alias funct7: std_logic_vector(6 downto 0) is instr_t(31 downto 25);
-   	alias funct3: std_logic_vector(2 downto 0) is instr_t(14 downto 12);
-   	alias opCode: std_logic_vector(6 downto 0) is instr_t(6 downto 0);
-    alias rw_t  : std_logic_vector(REG_NUM -1 downto 0) is instr_t(11 downto 7);
-    alias ra_t  : std_logic_vector(REG_NUM -1 downto 0) is instr_t(19 downto 15);
-    alias rb_t  : std_logic_vector(REG_NUM -1 downto 0) is instr_t(24 downto 20);
-    alias imm   : std_logic_vector(11 downto 0) is instr_t(31 downto 20);
-    alias LM_res_t : std_logic_vector(1 downto 0) is res_t(1 downto 0);
+    alias funct7    : std_logic_vector(6 downto 0) is instr_t(31 downto 25);
+   	alias funct3    : std_logic_vector(2 downto 0) is instr_t(14 downto 12);
+   	alias opCode    : std_logic_vector(6 downto 0) is instr_t(6 downto 0);
+    alias rw_t      : std_logic_vector(REG_NUM -1 downto 0) is instr_t(11 downto 7);
+    alias ra_t      : std_logic_vector(REG_NUM -1 downto 0) is instr_t(19 downto 15);
+    alias rb_t      : std_logic_vector(REG_NUM -1 downto 0) is instr_t(24 downto 20);
+    alias imm       : std_logic_vector(11 downto 0) is instr_t(31 downto 20);
+    alias LM_res_t  : std_logic_vector(1 downto 0) is res_t(1 downto 0);
 begin
     alu_map: ALU
     generic map (
@@ -58,7 +60,7 @@ begin
     )
     port map (
         aluOp   => aluOp_t,
-        opA     => opA_t,
+        opA     => opA_out_t,
         opB     => opB_out_t,
         res     => res_t
     );
@@ -82,6 +84,7 @@ begin
         SM_instr    => SM_instr_t,
         Bres        => Bres_t,
         Btype       => Btype_t,
+        Bsel        => Bsel_t,
         reset       => reset
     );
 
@@ -121,7 +124,7 @@ begin
         rw      => rw_t,
         ra      => ra_t,
         rb      => rb_t,
-        busA    => opA_t,
+        busA    => opA_in_t,
         busB    => opB_in_t,
         reset   => reset
     );
@@ -195,5 +198,27 @@ begin
         funct3  => SM_instr_t,
         q       => data_t,
         data_out=> DMEM_in_t
+    );
+
+    BC_map: BC
+    generic map(
+   		N => DATA_WIDTH
+   	)
+   	port map(
+   		busA	=> opA_in_t,
+   		busB	=> opB_in_t,
+   		Btype	=> Btype_t,
+   		Bres	=> Bres_t
+   	);
+
+    B_mux_map: B_mux
+     generic map(
+        N => DATA_WIDTH
+    )
+     port map(
+        busA => opA_in_t,
+        dout => dout_t,
+        Bsel => Bsel_t,
+        busAout => opA_out_t
     );
 end architecture rtl;
