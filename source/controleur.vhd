@@ -25,7 +25,8 @@ entity controleur is
 		LM_instr    : out std_logic_vector(2 downto 0);
 		insType     : out std_logic_vector(1 downto 0);
 		SM_instr    : out std_logic_vector(1 downto 0);
-		Btype       : out std_logic_vector(2 downto 0)
+		Btype       : out std_logic_vector(2 downto 0);
+		Bsel        : out std_logic
 	);
 end entity;
 
@@ -72,6 +73,7 @@ begin
 			LM_instr    <= "000";
 			SM_instr    <= "00";
 			Btype       <= "000";
+			Bsel        <= '0';
 		elsif (opCode = "0110011") then -- R
 			aluOp 		<= funct7(5) & funct3;
 			PC 			<= '0';
@@ -79,6 +81,7 @@ begin
 			RI_sel      <= '0';
 			load        <= '0';
 			wrMem       <= "0000";
+			Bsel        <= '0';
 		elsif (opCode = "0010011") then -- I
 		    aluOp 		<= '0' & funct3;
 			PC          <= '0';
@@ -87,6 +90,7 @@ begin
 			load        <= '0';
 			wrMem       <= "0000";
 			insType     <= "00";
+			Bsel        <= '0';
 		elsif (opCode = "0000011") then -- Load
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
@@ -96,6 +100,7 @@ begin
             insType     <= "00"; -- peut être inutile
             wrMem       <= "0000"; -- n'écrit pas en mémoire car ne fait que la lire
             LM_instr    <= funct3;
+            Bsel        <= '0';
         elsif (opCode = "0100011") then -- Store
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
@@ -105,6 +110,7 @@ begin
             wrMem       <= wrmem_case(store_instr => funct3(1 downto 0), res_store => res);
             insType     <= "01";
             SM_instr    <= funct3(1 downto 0);
+            Bsel        <= '0';
         elsif (opCode = "1100011") then -- Branch
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
@@ -113,6 +119,7 @@ begin
             load        <= Bres;
             wrMem       <= "0000";
             insType     <= "10";
+            Bsel        <= '1';
 		else
 			aluOp		<= "1111";
 			PC 			<= '0';
@@ -120,6 +127,7 @@ begin
 			RI_sel      <= '0';
 			load        <= '0';
 			wrMem       <= "0000";
+			Bsel        <= '0';
 		end if;
 	end process;
 end rtl;
