@@ -5,7 +5,8 @@
 
 GHDL=ghdl
 BUILD=build
-TB_FILE=tb_LM
+TB_FILE=tb_Imm_ext
+
 GHDLFLAGS= --workdir=$(BUILD)
 GHDLRUNFLAGS= --wave=sim/$(TB_FILE).ghw
 

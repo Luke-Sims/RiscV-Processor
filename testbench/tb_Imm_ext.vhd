@@ -58,27 +58,26 @@ begin
         insType_t <= "10";
         -- create test for B
         -- Test 1: BEQ with small positive offset (4)
-        instr_t <= "000000" & "00001" & "00000" & "000" & "00001" & "1100011"; -- BEQ x1,x0,4
+        instr_t <= "0000000" & "00001" & "00000" & "000" & "01000" & "1100011"; -- BEQ x1,x0,4
         wait for 10 ns;
         assert immExt_t = x"00000004" report "BEQ x1,x0,4 failed" severity error;
 
         -- Test 2: BNE with negative offset (-8)
-        instr_t <= "111111" & "00001" & "00000" & "001" & "00001" & "1100011"; -- BNE x1,x0,-8
+        instr_t <= "1111111" & "00001" & "00000" & "001" & "00001" & "1100011"; -- BNE x1,x0,-16
         wait for 10 ns;
-        assert immExt_t = x"FFFFFFF8" report "BNE x1,x0,-8 failed" severity error;
+        assert immExt_t = x"FFFFFFF0" report "BNE x1,x0,-8 failed" severity error;
 
         -- Test 3: BLT with larger positive offset (16)
-        instr_t <= "000001" & "00001" & "00000" & "100" & "00001" & "1100011"; -- BLT x1,x0,16
+        instr_t <= "0000001" & "00001" & "00000" & "100" & "00000" & "1100011"; -- BLT x1,x0,16
         wait for 10 ns;
         assert immExt_t = x"00000010" report "BLT x1,x0,16 failed" severity error;
 
         -- Test 4: BGE with negative offset (-12)
-        instr_t <= "111110" & "00001" & "00000" & "101" & "00001" & "1100011"; -- BGE x1,x0,-12
+        instr_t <= "1111111" & "00001" & "00000" & "101" & "01001" & "1100011"; -- BGE x1,x0,-8
         wait for 10 ns;
-        assert immExt_t = x"FFFFFFF4" report "BGE x1,x0,-12 failed" severity error;
+        assert immExt_t = x"FFFFFFF4" report "BGE x1,x0,-8 failed" severity error;
 
         report "All tests passed!" severity note;
 		finish <= '1';
 	end process;
 end rtl;
--- 0000000001100001000000100010011
