@@ -85,7 +85,7 @@ begin
         -- Test 6: BLTU with huge offset (2048)
         instr_t <= "1000000" & "00001" & "00000" & "110" & "00000" & "1100011"; -- BLTU x1,x0,2048
         wait for 10 ns;
-        assert immExt_t = x"00000800" report "BLTU x1,x0,2048 failed" severity error;
+        assert immExt_t = x"FFFFF800" report "BLTU x1,x0,2048 failed" severity error;
 
         -- Test 7: BGEU with positive offset (4)
         instr_t <= "0000000" & "00001" & "00000" & "111" & "01000" & "1100011"; -- BGEU x1,x0,4
@@ -95,7 +95,7 @@ begin
         -- Test 6: BGEU with huge offset (2048)
         instr_t <= "1000000" & "00001" & "00000" & "111" & "00000" & "1100011"; -- BGEU x1,x0,2048
         wait for 10 ns;
-        assert immExt_t = x"00000800" report "BGEU x1,x0,2048 failed" severity error;
+        assert immExt_t = x"FFFFF800" report "BGEU x1,x0,2048 failed" severity error;
 
         report "All tests passed!" severity note;
 		finish <= '1';
