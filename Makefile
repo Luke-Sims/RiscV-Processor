@@ -26,11 +26,15 @@ $(TB_FILE): $(TARGET)
 
 # Run target
 run: $(TB_FILE)
-	$(GHDL) -r $(TB_FILE) $(GHDLRUNFLAGS)
+	$(GHDL) -r $(BUILD)/$(TB_FILE) $(GHDLRUNFLAGS)
 
 # Launch simulation
 sim: sim/$(TB_FILE).ghw
 	gtkwave sim/$(TB_FILE).ghw
+
+# Clean build and simulation files
+clean:
+	rm build/* sim/*
 
 # Targets to analyze files
 /usr/lib/ghdl/ieee/v93/std_logic_1164.o: /usr/lib/ghdl/ieee/v93/../../src/ieee/v93/std_logic_1164.vhdl
