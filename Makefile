@@ -5,14 +5,14 @@
 
 GHDL=ghdl
 BUILD=build
-TB_FILE=tb_Imm_ext
+TB_FILE=tb_riscV
 
 GHDLFLAGS= --workdir=$(BUILD)
 GHDLRUNFLAGS= --wave=sim/$(TB_FILE).ghw
 
 TARGET = /usr/lib/ghdl/ieee/v93/std_logic_1164.o /usr/lib/ghdl/ieee/v93/std_logic_1164-body.o /usr/lib/ghdl/ieee/v93/numeric_std.o
 TARGET += /usr/lib/ghdl/ieee/v93/numeric_std-body.o /usr/lib/ghdl/std/v93/textio.o /usr/lib/ghdl/std/v93/textio-body.o
-TARGET += $(TB_FILE).o RiscV_package.o riscVR.o ALU.o controleur.o single_port_pc.o single_port_rom.o single_port_register.o
+TARGET += $(TB_FILE).o RiscV_package.o riscV.o ALU.o controleur.o single_port_pc.o single_port_rom.o single_port_register.o
 TARGET += Imm_ext.o RI_mux.o DMEM.o load_mux.o LM.o SM.o BC.o B_mux.o
 
 DEPENDANCES = /usr/lib/ghdl/ieee/v93/std_logic_1164.o /usr/lib/ghdl/ieee/v93/numeric_std.o
@@ -59,7 +59,7 @@ $(TB_FILE).o: testbench/$(TB_FILE).vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 RiscV_package.o: source/RiscV_package.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
-riscVR.o: source/riscVR.vhd
+riscV.o: source/riscV.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 ALU.o: source/ALU.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
@@ -97,7 +97,7 @@ B_mux.o: source/B_mux.vhd
 /usr/lib/ghdl/std/v93/textio-body.o:  /usr/lib/ghdl/std/v93/textio.o
 $(TB_FILE).o:           $(DEPENDANCES) /usr/lib/ghdl/std/v93/textio.o
 RiscV_package.o:        $(DEPENDANCES)
-riscVR.o:               $(DEPENDANCES) RiscV_package.o
+riscV.o:               $(DEPENDANCES) RiscV_package.o
 ALU.o:                  $(DEPENDANCES)
 controleur.o:           $(DEPENDANCES)
 single_port_pc.o:       $(DEPENDANCES)

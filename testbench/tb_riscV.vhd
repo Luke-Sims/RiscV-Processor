@@ -3,18 +3,18 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.textio.all;
 
-entity tb_riscVR is
+entity tb_riscV is
     generic(
         DATA_WIDTH      : natural := 32;
         ADDR_WIDTH      : natural := 32;
         MEM_DEPTH	    : natural := 1000;
-        INIT_FILE       : string  := "scripts/store_02.hex";
+        INIT_FILE       : string  := "scripts/bltu_02.hex";
         INIT_FILE_MEM   : string  := "scripts/init_mem.hex";
         REG_NUM         : natural := 5
     );
 end entity;
 
-architecture rtl of tb_riscVR is
+architecture rtl of tb_riscV is
 
     constant N : natural := 32;
 
@@ -22,7 +22,7 @@ architecture rtl of tb_riscVR is
     signal reset_tb : boolean := false;
     signal finish   : std_logic   := '0';
 
-    component riscVR
+    component riscV
         generic(
             DATA_WIDTH      : natural;
             ADDR_WIDTH      : natural;
@@ -38,7 +38,7 @@ architecture rtl of tb_riscVR is
     end component;
 
 begin
-    tb_riscVR_map: riscVR
+    tb_riscV_map: riscV
     generic map(
         DATA_WIDTH      => DATA_WIDTH,
         ADDR_WIDTH      => ADDR_WIDTH,

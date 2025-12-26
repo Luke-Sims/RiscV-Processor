@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.RiscV_package.all;
 
-entity riscVR is
+entity riscV is
     generic(
         DATA_WIDTH      : natural;
         ADDR_WIDTH      : natural;
@@ -18,7 +18,7 @@ entity riscVR is
     );
 end entity;
 
-architecture rtl of riscVR is
+architecture rtl of riscV is
     signal aluOp_t      : std_logic_vector(3 downto 0);
     signal opA_in_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal opB_in_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
