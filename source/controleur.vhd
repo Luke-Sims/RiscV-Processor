@@ -55,7 +55,7 @@ architecture rtl of controleur is
     				return "0000";
     		end case;
     end function;
-    --*/
+
     alias funct7: std_logic_vector(6 downto 0) is instr(31 downto 25);
 	alias funct3: std_logic_vector(2 downto 0) is instr(14 downto 12);
 	alias opCode: std_logic_vector(6 downto 0) is instr(6 downto 0);
@@ -64,7 +64,7 @@ begin
 	process(opCode,funct7,funct3,res,reset) -- add reset
 	begin
 	    if reset then -- reset
-			PC          <= '0';
+			PC          <= '1'; -- have to reset PC
 			WriteEnable <= '0';
 			RI_sel      <= '0';
 			load        <= '1';
@@ -113,13 +113,14 @@ begin
             Bsel        <= '0';
         elsif (opCode = "1100011") then -- Branch
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
-            PC          <= '0';
+            PC          <= Bres;
             WriteEnable <= '0';
             RI_sel      <= '1';
-            load        <= Bres;
+            load        <= '0';
             wrMem       <= "0000";
             insType     <= "10";
             Bsel        <= '1';
+            Btype       <= funct3;
 		else
 			aluOp		<= "1111";
 			PC 			<= '0';

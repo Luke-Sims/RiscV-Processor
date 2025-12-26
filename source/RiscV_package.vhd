@@ -57,7 +57,7 @@ package RiscV_package is
     	(
     		clk		: in std_logic;
     		data	: in std_logic_vector((N - 1) downto 0);
-    		we		: in std_logic := '1';
+    		we		: in std_logic;
     		reset   : in boolean;
     		q		: out std_logic_vector((N - 1) downto 0)
     	);
