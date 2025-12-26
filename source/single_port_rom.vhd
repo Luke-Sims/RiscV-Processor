@@ -92,5 +92,5 @@ begin
 
     -- asynchronous reading
 
-    q   <=  mem(to_integer(unsigned(addr))) when to_integer(unsigned(addr)) < MEM_DEPTH-4 else (others => '0');
+    q   <=  mem(to_integer(unsigned(addr)/4)) when to_integer(unsigned(addr)/4) < MEM_DEPTH else (others => '0');
 end rtl;

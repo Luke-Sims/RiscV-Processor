@@ -16,7 +16,7 @@ entity single_port_pc is
 	(
 		clk		: in std_logic;
 		data	: in std_logic_vector((N - 1) downto 0);
-		we		: in std_logic := '1';
+		we		: in std_logic;
 		reset   : in boolean;
 		q		: out std_logic_vector((N - 1) downto 0)
 	);
@@ -34,7 +34,7 @@ begin
 			if(we = '1') then
 				PC <= data;
 			else
-				PC <= std_logic_vector(to_unsigned(to_integer(signed(PC))+1, N));
+				PC <= std_logic_vector(to_unsigned(to_integer(signed(PC))+4, N));
 			end if;
 
 			-- Register the address for reading
