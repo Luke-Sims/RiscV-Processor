@@ -47,7 +47,7 @@ package RiscV_package is
     	);
     end component;
 
-    component single_port_pc is
+    component PC is
         generic
     	(
     		N : natural := 32
@@ -63,7 +63,7 @@ package RiscV_package is
     	);
     end component;
 
-    component single_port_rom is
+    component IMEM is
 
         generic(
             DATA_WIDTH  :   natural;
@@ -78,7 +78,7 @@ package RiscV_package is
 
     end component;
 
-    component single_port_register is
+    component REG is
         generic
     	(
     		N       : natural := 32;

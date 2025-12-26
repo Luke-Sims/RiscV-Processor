@@ -88,7 +88,7 @@ begin
         reset       => reset
     );
 
-    pc_map: single_port_pc
+    pc_map: PC
     generic map (
         N => ADDR_WIDTH
     )
@@ -100,7 +100,7 @@ begin
         q     => dout_t
     );
 
-    imem_map: single_port_rom
+    imem_map: IMEM
     generic map (
         DATA_WIDTH  => DATA_WIDTH,
         ADDR_WIDTH  => ADDR_WIDTH,
@@ -112,7 +112,7 @@ begin
         q    => instr_t
     );
 
-    register_map: single_port_register
+    register_map: REG
     generic map (
         N => DATA_WIDTH,
         REG_NUM => REG_NUM

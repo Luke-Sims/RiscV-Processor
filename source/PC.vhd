@@ -5,7 +5,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity single_port_pc is
+entity PC is
 
 	generic
 	(
@@ -23,22 +23,22 @@ entity single_port_pc is
 
 end entity;
 
-architecture rtl of single_port_pc is
-	 signal PC : std_logic_vector((N - 1) downto 0);
+architecture rtl of PC is
+	 signal PC_val : std_logic_vector((N - 1) downto 0);
 begin
 	process(clk,reset)
 	begin
         if reset then
-            PC <= std_logic_vector(to_unsigned(0, N));
+            PC_val <= std_logic_vector(to_unsigned(0, N));
 		elsif(rising_edge(clk)) then
 			if(we = '1') then
-				PC <= data;
+				PC_val <= data;
 			else
-				PC <= std_logic_vector(to_unsigned(to_integer(signed(PC))+4, N));
+				PC_val <= std_logic_vector(to_unsigned(to_integer(signed(PC_val))+4, N));
 			end if;
 
 			-- Register the address for reading
 		end if;
 	end process;
-	q <= PC;
+	q <= PC_val;
 end rtl;

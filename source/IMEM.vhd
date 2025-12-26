@@ -6,7 +6,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use std.textio.all;
 
-entity single_port_rom is
+entity IMEM is
 
 generic
     (
@@ -24,7 +24,7 @@ generic
 
 end entity;
 
-architecture rtl of single_port_rom is
+architecture rtl of IMEM is
 
 	-- Build a 2-D array type for the ROM
 	subtype word_t is std_logic_vector((DATA_WIDTH-1) downto 0);

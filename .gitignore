@@ -7,3 +7,4 @@ sim/
 *.qsf
 *.rpt
 *.o
+tb_riscv
