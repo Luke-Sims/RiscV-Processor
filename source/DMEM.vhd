@@ -82,7 +82,7 @@ architecture rtl of DMEM is
     signal temp     : natural range 0 to MEM_DEPTH-1;
 begin
     mem_0 <= addr(ADDR_WIDTH -1 downto 2)&"00";
-    temp  <= to_integer(unsigned(mem_0)) when to_integer(unsigned(mem_0)) < MEM_DEPTH-4 else 0; -- return index 0 if overflow memory
+    temp  <= 0 when unsigned(mem_0) >= to_unsigned(MEM_DEPTH-4,32) else to_integer(unsigned(mem_0)); -- return index 0 if overflow memory
     ---- asynchronous reading
     q   <=  mem(temp+3) &
             mem(temp+2) &
