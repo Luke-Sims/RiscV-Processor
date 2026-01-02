@@ -23,6 +23,6 @@ begin
     with insType select
         immExt <= temp & imm_I when "00",
                   temp & instr(31 downto 25) & instr(11 downto 7) when "01",
-                  temp(19 downto 1) & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & temp(0) when others;
+                  temp(19 downto 1) & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0' when others;
 
 end rtl;

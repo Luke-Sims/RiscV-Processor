@@ -79,6 +79,17 @@ begin
         wait for 10 ns;
         assert Bres_t = '0' report "BLT: 0 < -1 failed" severity error;
 
+        busA_t <= std_logic_vector(to_signed( 16, N));
+        busB_t <= std_logic_vector(to_signed( 0, N));
+        Btype_t <= "100";
+        wait for 10 ns;
+        assert Bres_t = '0' report "BLT: -1 < 0 failed" severity error;
+
+        busA_t <= std_logic_vector(to_signed( 0, N));
+        busB_t <= std_logic_vector(to_signed( 16, N));
+        Btype_t <= "100";
+        wait for 10 ns;
+        assert Bres_t = '1' report "BLT: 0 < -1 failed" severity error;
         -- Test "101": signed >=
         busA_t <= std_logic_vector(to_signed(  -1, N));
         busB_t <= std_logic_vector(to_signed(   0, N));

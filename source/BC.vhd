@@ -25,12 +25,12 @@ begin
 	process(busA,busB,Btype)
 	begin
 	    case Btype is
-			when "000" => Bres_t <= busA = busB;
-			when "001" => Bres_t <= not(busA = busB);
-			when "100" => Bres_t <= signed(busA) < signed(busB);
-			when "101" => Bres_t <= signed(busA) >= signed(busB);
-			when "110" => Bres_t <= unsigned(busA) < unsigned(busB);
-			when "111" => Bres_t <= unsigned(busA) >= unsigned(busB);
+			when "000" => Bres_t <= busA = busB;                     -- BEQ
+			when "001" => Bres_t <= not(busA = busB);                -- BNE
+			when "100" => Bres_t <= signed(busA) < signed(busB);     -- BLT (TODO: erreur)
+			when "101" => Bres_t <= signed(busA) >= signed(busB);    -- BGE
+			when "110" => Bres_t <= unsigned(busA) < unsigned(busB); -- BLTU
+			when "111" => Bres_t <= unsigned(busA) >= unsigned(busB);-- BGEU
 			when others => Bres_t <= false;
 		end case;
 	end process;

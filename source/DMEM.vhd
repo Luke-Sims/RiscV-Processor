@@ -83,6 +83,7 @@ architecture rtl of DMEM is
 begin
     mem_0 <= addr(ADDR_WIDTH -1 downto 2)&"00";
     temp  <= 0 when unsigned(mem_0) >= to_unsigned(MEM_DEPTH-4,32) else to_integer(unsigned(mem_0)); -- return index 0 if overflow memory
+    -- create assertion warnings
     ---- asynchronous reading
     q   <=  mem(temp+3) &
             mem(temp+2) &
