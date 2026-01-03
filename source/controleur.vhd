@@ -130,7 +130,6 @@ begin
             wrMem       <= "0000";
             insType     <= "011";
             Bsel        <= '1';
-            Btype       <= funct3;
         elsif (opCode = "1100111") then -- JALR
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '1';
@@ -140,7 +139,6 @@ begin
             wrMem       <= "0000";
             insType     <= "000";
             Bsel        <= '0';
-            Btype       <= funct3;
 		else
 			aluOp		<= "1111";
 			PC 			<= '0';
