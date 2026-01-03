@@ -40,7 +40,7 @@ package RiscV_package is
     		loadAccJump : out std_logic_vector(1 downto 0);
     		wrMem       : out std_logic_vector(3 downto 0);
     		LM_instr    : out std_logic_vector(2 downto 0);
-    		insType     : out std_logic_vector(1 downto 0);
+    		insType     : out std_logic_vector(2 downto 0);
     		SM_instr    : out std_logic_vector(1 downto 0);
     		Btype       : out std_logic_vector(2 downto 0);
             Bsel        : out std_logic
@@ -106,7 +106,7 @@ package RiscV_package is
     );
     port (
         instr    : in std_logic_vector(N -1 downto 0);
-        insType  : in std_logic_vector(1 downto 0); -- 00 si I, 01 si S, 10 si B
+        insType  : in std_logic_vector(2 downto 0); -- 000 si I ou JALR, 001 si S, 010 si B, 011 si JAL, 100 si U
         immExt   : out std_logic_vector(N -1 downto 0)
     );
     end component;

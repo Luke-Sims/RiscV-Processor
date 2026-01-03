@@ -8,8 +8,7 @@ entity Imm_ext is
     );
     port (
         instr    : in std_logic_vector(N -1 downto 0);
-        -- 3 bits for JAL, JALR and U
-        insType  : in std_logic_vector(1 downto 0); -- 00 si I, 01 si S, 10 si B,
+        insType  : in std_logic_vector(2 downto 0); -- 000 si I ou JALR, 001 si S, 010 si B, 011 si JAL, 100 si U
         immExt   : out std_logic_vector(N -1 downto 0)
     );
 end entity;
@@ -22,8 +21,10 @@ begin
     temp <= (others => instr(31));
 
     with insType select
-        immExt <= temp & imm_I when "00",
-                  temp & instr(31 downto 25) & instr(11 downto 7) when "01",
-                  temp(19 downto 1) & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0' when others;
+        immExt <= temp & imm_I when "000", -- I ou JALR
+                  temp & instr(31 downto 25) & instr(11 downto 7) when "001", -- S
+                  temp(19 downto 1) & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0' when "010", -- B
+                  temp(19 downto 1) & instr(31) & instr(19 downto 12) & instr(20) & instr(30 downto 21) & '0' when "011", -- JAL
+                  temp(11 downto 0) & instr(31 downto 12) when others; -- U
 
 end rtl;

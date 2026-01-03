@@ -39,7 +39,7 @@ architecture rtl of riscV is
     signal DMEM_in_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal LM_instr_t   : std_logic_vector(2 downto 0);
     signal to_load_mux_t: std_logic_vector((DATA_WIDTH -1) downto 0);
-    signal insType_t    : std_logic_vector(1 downto 0);
+    signal insType_t    : std_logic_vector(2 downto 0);
     signal SM_instr_t   : std_logic_vector(1 downto 0);
     signal Btype_t      : std_logic_vector(2 downto 0);
     signal Bres_t       : std_logic;

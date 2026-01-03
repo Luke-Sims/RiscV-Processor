@@ -23,7 +23,7 @@ entity controleur is
 		loadAccJump : out std_logic_vector(1 downto 0);
 		wrMem       : out std_logic_vector(3 downto 0);
 		LM_instr    : out std_logic_vector(2 downto 0);
-		insType     : out std_logic_vector(1 downto 0);
+		insType     : out std_logic_vector(2 downto 0);
 		SM_instr    : out std_logic_vector(1 downto 0);
 		Btype       : out std_logic_vector(2 downto 0);
 		Bsel        : out std_logic
@@ -69,7 +69,7 @@ begin
 			RI_sel      <= '0';
 			loadAccJump <= "00";
 			wrMem       <= "0000";
-			insType     <= "00";
+			insType     <= "000";
 			LM_instr    <= "000";
 			SM_instr    <= "00";
 			Btype       <= "000";
@@ -89,7 +89,7 @@ begin
 			RI_sel      <= '1';
 			loadAccJump <= "00";
 			wrMem       <= "0000";
-			insType     <= "00";
+			insType     <= "000";
 			Bsel        <= '0';
 		elsif (opCode = "0000011") then -- load
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
@@ -97,7 +97,7 @@ begin
             WriteEnable <= '1';
             RI_sel      <= '1';
             loadAccJump <= "01";
-            insType     <= "00"; -- peut être inutile
+            insType     <= "000"; -- peut être inutile
             wrMem       <= "0000"; -- n'écrit pas en mémoire car ne fait que la lire
             LM_instr    <= funct3;
             Bsel        <= '0';
@@ -108,7 +108,7 @@ begin
             RI_sel      <= '1';
             loadAccJump <= "01";
             wrMem       <= wrmem_case(store_instr => funct3(1 downto 0), res_store => res);
-            insType     <= "01";
+            insType     <= "001";
             SM_instr    <= funct3(1 downto 0);
             Bsel        <= '0';
         elsif (opCode = "1100011") then -- Branch
@@ -118,7 +118,7 @@ begin
             RI_sel      <= '1';
             loadAccJump <= "00";
             wrMem       <= "0000";
-            insType     <= "10";
+            insType     <= "010";
             Bsel        <= '1';
             Btype       <= funct3;
         elsif (opCode = "1101111") then -- JAL
@@ -128,7 +128,7 @@ begin
             RI_sel      <= '1';
             loadAccJump <= "10";
             wrMem       <= "0000";
-            insType     <= "10";
+            insType     <= "011";
             Bsel        <= '1';
             Btype       <= funct3;
         elsif (opCode = "1100111") then -- JALR
@@ -138,7 +138,7 @@ begin
             RI_sel      <= '1';
             loadAccJump <= "10";
             wrMem       <= "0000";
-            insType     <= "10";
+            insType     <= "000";
             Bsel        <= '1';
             Btype       <= funct3;
 		else
