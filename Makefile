@@ -12,7 +12,7 @@ GHDLRUNFLAGS= --wave=sim/$(TB_FILE).ghw
 
 TARGET = /usr/lib/ghdl/ieee/v93/std_logic_1164.o /usr/lib/ghdl/ieee/v93/std_logic_1164-body.o /usr/lib/ghdl/ieee/v93/numeric_std.o
 TARGET += /usr/lib/ghdl/ieee/v93/numeric_std-body.o /usr/lib/ghdl/std/v93/textio.o /usr/lib/ghdl/std/v93/textio-body.o
-TARGET += $(TB_FILE).o RiscV_package.o riscV.o ALU.o controleur.o PC.o IMEM.o REG.o Imm_ext.o RI_mux.o DMEM.o load_mux.o
+TARGET += $(TB_FILE).o RiscV_package.o riscV.o ALU.o controleur.o PC.o IMEM.o REG.o Imm_ext.o RI_mux.o DMEM.o load_jump_mux.o
 TARGET += LM.o SM.o BC.o B_mux.o
 
 DEPENDANCES = /usr/lib/ghdl/ieee/v93/std_logic_1164.o /usr/lib/ghdl/ieee/v93/numeric_std.o
@@ -77,7 +77,7 @@ RI_mux.o: source/RI_mux.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 DMEM.o: source/DMEM.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
-load_mux.o: source/load_mux.vhd
+load_jump_mux.o: source/load_jump_mux.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 LM.o: source/LM.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
@@ -106,7 +106,7 @@ REG.o: 					$(DEPENDANCES)
 Imm_ext.o:              $(DEPENDANCES)
 RI_mux.o:               $(DEPENDANCES)
 DMEM.o:                 $(DEPENDANCES) /usr/lib/ghdl/std/v93/textio.o
-load_mux.o:             $(DEPENDANCES)
+load_jump_mux.o:        $(DEPENDANCES)
 LM.o:                   $(DEPENDANCES)
 SM.o:                   $(DEPENDANCES)
 BC.o:                   $(DEPENDANCES)

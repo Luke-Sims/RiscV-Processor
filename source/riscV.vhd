@@ -31,7 +31,7 @@ architecture rtl of riscV is
     signal dout_t       : std_logic_vector((ADDR_WIDTH - 1) downto 0);
     signal RI_sel_t     : std_logic;
     signal immExt_t     : std_logic_vector((DATA_WIDTH -1) downto 0);
-    signal loadAcc_t    : std_logic;
+    signal loadAccJump_t    : std_logic_vector(1 downto 0);
     signal wrMem_t      : std_logic_vector(3 downto 0);
     signal data_t       : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal busW_t       : std_logic_vector((DATA_WIDTH -1) downto 0);
@@ -44,6 +44,7 @@ architecture rtl of riscV is
     signal Btype_t      : std_logic_vector(2 downto 0);
     signal Bres_t       : std_logic;
     signal Bsel_t       : std_logic;
+    signal PC4_t        : std_logic_vector((DATA_WIDTH -1) downto 0);
 
     alias funct7    : std_logic_vector(6 downto 0) is instr_t(31 downto 25);
    	alias funct3    : std_logic_vector(2 downto 0) is instr_t(14 downto 12);
@@ -76,7 +77,7 @@ begin
         aluOp       => aluOp_t,
         PC          => load_t,
         RI_sel      => RI_sel_t,
-        load        => loadAcc_t,
+        loadAccJump => loadAccJump_t,
         wrMem       => wrMem_t,
         res         => LM_res_t,
         LM_instr    => LM_instr_t,
@@ -97,6 +98,7 @@ begin
         data  => res_t,
         we    => load_t,
         reset => reset,
+        PC4   => PC4_t,
         q     => dout_t
     );
 
@@ -166,14 +168,15 @@ begin
         we   => wrMem_t
     );
 
-    load_mux_map: load_mux
+    load_mux_map: load_jump_mux
      generic map(
         N => DATA_WIDTH
     )
      port map(
         busA => res_t,
         busB => to_load_mux_t,
-        load => loadAcc_t,
+        PC4 => PC4_t,
+        load => loadAccJump_t,
         res  => busW_t
     );
 

@@ -37,7 +37,7 @@ package RiscV_package is
     		aluOp		: out std_logic_vector(3 downto 0);
     		PC			: out std_logic:= '0';
     		RI_sel      : out std_logic;
-    		load        : out std_logic;
+    		loadAccJump : out std_logic_vector(1 downto 0);
     		wrMem       : out std_logic_vector(3 downto 0);
     		LM_instr    : out std_logic_vector(2 downto 0);
     		insType     : out std_logic_vector(1 downto 0);
@@ -59,7 +59,8 @@ package RiscV_package is
     		data	: in std_logic_vector((N - 1) downto 0);
     		we		: in std_logic;
     		reset   : in boolean;
-    		q		: out std_logic_vector((N - 1) downto 0)
+    		PC4		: out std_logic_vector((N - 1) downto 0);
+            q		: out std_logic_vector((N - 1) downto 0)
     	);
     end component;
 
@@ -122,14 +123,15 @@ package RiscV_package is
         );
     end component;
 
-    component load_mux is
+    component load_jump_mux is
         generic(
             N : natural := 32
         );
         port (
             busA : in std_logic_vector(N-1 downto 0);
             busB : in std_logic_vector(N-1 downto 0);
-            load : in std_logic;
+            PC4  : in std_logic_vector(N-1 downto 0);
+            load : in std_logic_vector(1 downto 0);
             res  : out std_logic_vector(N-1 downto 0)
         );
     end component;

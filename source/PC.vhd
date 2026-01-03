@@ -18,6 +18,7 @@ entity PC is
 		data	: in std_logic_vector((N - 1) downto 0);
 		we		: in std_logic;
 		reset   : in boolean;
+		PC4     : out std_logic_vector((N - 1) downto 0);
 		q		: out std_logic_vector((N - 1) downto 0)
 	);
 
@@ -41,4 +42,5 @@ begin
 		end if;
 	end process;
 	q <= PC_val;
+	PC4 <= std_logic_vector(to_unsigned(to_integer(unsigned(PC_val))+4,N));
 end rtl;

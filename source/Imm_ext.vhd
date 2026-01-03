@@ -8,7 +8,8 @@ entity Imm_ext is
     );
     port (
         instr    : in std_logic_vector(N -1 downto 0);
-        insType  : in std_logic_vector(1 downto 0); -- 00 si I, 01 si S, 10 si B
+        -- 3 bits for JAL, JALR and U
+        insType  : in std_logic_vector(1 downto 0); -- 00 si I, 01 si S, 10 si B,
         immExt   : out std_logic_vector(N -1 downto 0)
     );
 end entity;
