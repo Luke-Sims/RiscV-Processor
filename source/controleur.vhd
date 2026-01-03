@@ -26,7 +26,7 @@ entity controleur is
 		insType     : out std_logic_vector(2 downto 0);
 		SM_instr    : out std_logic_vector(1 downto 0);
 		Btype       : out std_logic_vector(2 downto 0);
-		Bsel        : out std_logic
+		Bsel        : out std_logic_vector(1 downto 0)
 	);
 end entity;
 
@@ -73,7 +73,7 @@ begin
 			LM_instr    <= "000";
 			SM_instr    <= "00";
 			Btype       <= "000";
-			Bsel        <= '0';
+			Bsel        <= "00";
 		elsif (opCode = "0110011") then -- R
 			aluOp 		<= funct7(5) & funct3;
 			PC 			<= '0';
@@ -81,7 +81,7 @@ begin
 			RI_sel      <= '0';
 			loadAccJump <= "00";
 			wrMem       <= "0000";
-			Bsel        <= '0';
+			Bsel        <= "00";
 		elsif (opCode = "0010011") then -- I
 		    aluOp 		<= '0' & funct3;
 			PC          <= '0';
@@ -90,7 +90,7 @@ begin
 			loadAccJump <= "00";
 			wrMem       <= "0000";
 			insType     <= "000";
-			Bsel        <= '0';
+			Bsel        <= "00";
 		elsif (opCode = "0000011") then -- load
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
@@ -100,7 +100,7 @@ begin
             insType     <= "000"; -- peut être inutile
             wrMem       <= "0000"; -- n'écrit pas en mémoire car ne fait que la lire
             LM_instr    <= funct3;
-            Bsel        <= '0';
+            Bsel        <= "00";
         elsif (opCode = "0100011") then -- Store
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
@@ -110,7 +110,7 @@ begin
             wrMem       <= wrmem_case(store_instr => funct3(1 downto 0), res_store => res);
             insType     <= "001";
             SM_instr    <= funct3(1 downto 0);
-            Bsel        <= '0';
+            Bsel        <= "00";
         elsif (opCode = "1100011") then -- Branch
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= Bres;
@@ -119,7 +119,7 @@ begin
             loadAccJump <= "00";
             wrMem       <= "0000";
             insType     <= "010";
-            Bsel        <= '1';
+            Bsel        <= "01";
             Btype       <= funct3;
         elsif (opCode = "1101111") then -- JAL
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
@@ -129,7 +129,7 @@ begin
             loadAccJump <= "10";
             wrMem       <= "0000";
             insType     <= "011";
-            Bsel        <= '1';
+            Bsel        <= "01";
         elsif (opCode = "1100111") then -- JALR
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '1';
@@ -138,7 +138,25 @@ begin
             loadAccJump <= "10";
             wrMem       <= "0000";
             insType     <= "000";
-            Bsel        <= '0';
+            Bsel        <= "00";
+        elsif (opCode = "0110111") then -- LUI
+            aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
+            PC          <= '0';
+            WriteEnable <= '1';
+            RI_sel      <= '1';
+            loadAccJump <= "00";
+            wrMem       <= "0000";
+            insType     <= "100";
+            Bsel        <= "10";
+        elsif (opCode = "0010111") then -- AUIPC
+            aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
+            PC          <= '0';
+            WriteEnable <= '1';
+            RI_sel      <= '1';
+            loadAccJump <= "00";
+            wrMem       <= "0000";
+            insType     <= "100";
+            Bsel        <= "01";
 		else
 			aluOp		<= "1111";
 			PC 			<= '0';
@@ -146,7 +164,7 @@ begin
 			RI_sel      <= '0';
 			loadAccJump <= "00";
 			wrMem       <= "0000";
-			Bsel        <= '0';
+			Bsel        <= "00";
 		end if;
 	end process;
 end rtl;

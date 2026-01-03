@@ -43,7 +43,7 @@ package RiscV_package is
     		insType     : out std_logic_vector(2 downto 0);
     		SM_instr    : out std_logic_vector(1 downto 0);
     		Btype       : out std_logic_vector(2 downto 0);
-            Bsel        : out std_logic
+            Bsel        : out std_logic_vector(1 downto 0)
     	);
     end component;
 
@@ -201,7 +201,7 @@ package RiscV_package is
         port (
             busA    : in std_logic_vector(N-1 downto 0);
             dout    : in std_logic_vector(N-1 downto 0);
-            Bsel    : in std_logic;
+            Bsel    : in std_logic_vector(1 downto 0);
             busAout : out std_logic_vector(N-1 downto 0)
         );
     end component;
