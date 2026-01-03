@@ -24,7 +24,7 @@ begin
         immExt <= temp & imm_I when "000", -- I ou JALR
                   temp & instr(31 downto 25) & instr(11 downto 7) when "001", -- S
                   temp(19 downto 1) & instr(31) & instr(7) & instr(30 downto 25) & instr(11 downto 8) & '0' when "010", -- B
-                  temp(19 downto 1) & instr(31) & instr(19 downto 12) & instr(20) & instr(30 downto 21) & '0' when "011", -- JAL
+                  temp(11 downto 1) & instr(31) & instr(19 downto 12) & instr(20) & instr(30 downto 21) & '0' when "011", -- JAL
                   instr(31 downto 12) & x"000" when others; -- U
 
 end rtl;
