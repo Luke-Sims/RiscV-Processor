@@ -25,13 +25,13 @@ architecture rtl of riscV is
     signal opA_out_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal opB_out_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal res_t	    : std_logic_vector((DATA_WIDTH -1) downto 0);
-    signal instr_t      : std_logic_vector((DATA_WIDTH -1) downto 0);
+    signal instrIn_t    : std_logic_vector((ADDR_WIDTH -1) downto 0);
     signal we_t         : std_logic:= '0';
     signal load_t       : std_logic:= '0';
     signal dout_t       : std_logic_vector((ADDR_WIDTH - 1) downto 0);
     signal RI_sel_t     : std_logic;
     signal immExt_t     : std_logic_vector((DATA_WIDTH -1) downto 0);
-    signal loadAccJump_t    : std_logic_vector(1 downto 0);
+    signal loadAccJump_t: std_logic_vector(1 downto 0);
     signal wrMem_t      : std_logic_vector(3 downto 0);
     signal data_t       : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal busW_t       : std_logic_vector((DATA_WIDTH -1) downto 0);
@@ -45,14 +45,16 @@ architecture rtl of riscV is
     signal Bres_t       : std_logic;
     signal Bsel_t       : std_logic_vector(1 downto 0);
     signal PC4_t        : std_logic_vector((DATA_WIDTH -1) downto 0);
+    signal instrOut_t   : std_logic_vector((ADDR_WIDTH-1) downto 0);
+    signal enable_t     : std_logic;
 
-    alias funct7    : std_logic_vector(6 downto 0) is instr_t(31 downto 25);
-   	alias funct3    : std_logic_vector(2 downto 0) is instr_t(14 downto 12);
-   	alias opCode    : std_logic_vector(6 downto 0) is instr_t(6 downto 0);
-    alias rw_t      : std_logic_vector(REG_NUM -1 downto 0) is instr_t(11 downto 7);
-    alias ra_t      : std_logic_vector(REG_NUM -1 downto 0) is instr_t(19 downto 15);
-    alias rb_t      : std_logic_vector(REG_NUM -1 downto 0) is instr_t(24 downto 20);
-    alias imm       : std_logic_vector(11 downto 0) is instr_t(31 downto 20);
+    alias funct7    : std_logic_vector(6 downto 0) is instrOut_t(31 downto 25);
+   	alias funct3    : std_logic_vector(2 downto 0) is instrOut_t(14 downto 12);
+   	alias opCode    : std_logic_vector(6 downto 0) is instrOut_t(6 downto 0);
+    alias rw_t      : std_logic_vector(REG_NUM -1 downto 0) is instrOut_t(11 downto 7);
+    alias ra_t      : std_logic_vector(REG_NUM -1 downto 0) is instrOut_t(19 downto 15);
+    alias rb_t      : std_logic_vector(REG_NUM -1 downto 0) is instrOut_t(24 downto 20);
+    alias imm       : std_logic_vector(11 downto 0) is instrOut_t(31 downto 20);
     alias LM_res_t  : std_logic_vector(1 downto 0) is res_t(1 downto 0);
 begin
     alu_map: ALU
@@ -72,7 +74,7 @@ begin
     )
     port map(
         clk         => clk,
-        instr       => instr_t,
+        instr       => instrOut_t,
         WriteEnable => we_t,
         aluOp       => aluOp_t,
         PC          => load_t,
@@ -86,7 +88,8 @@ begin
         Bres        => Bres_t,
         Btype       => Btype_t,
         Bsel        => Bsel_t,
-        reset       => reset
+        reset       => reset,
+        enable      => enable_t
     );
 
     pc_map: PC
@@ -111,7 +114,8 @@ begin
     )
     port map(
         addr => dout_t,
-        q    => instr_t
+        clk  => clk,
+        q    => instrIn_t
     );
 
     register_map: REG
@@ -136,7 +140,7 @@ begin
         N => DATA_WIDTH
     )
     port map(
-        instr   => instr_t,
+        instr   => instrOut_t,
         insType => insType_t,
         immExt  => immExt_t
     );
@@ -223,5 +227,15 @@ begin
         dout => dout_t,
         Bsel => Bsel_t,
         busAout => opA_out_t
+    );
+
+    registre_instruction_map: registre_instruction
+    generic map(
+        N => ADDR_WIDTH
+    )
+    port map(
+        enable    => enable_t,
+        instr_in  => instrIn_t,
+        instr_out => instrOut_t
     );
 end architecture rtl;

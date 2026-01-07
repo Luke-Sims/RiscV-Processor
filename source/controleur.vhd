@@ -26,7 +26,8 @@ entity controleur is
 		insType     : out std_logic_vector(2 downto 0);
 		SM_instr    : out std_logic_vector(1 downto 0);
 		Btype       : out std_logic_vector(2 downto 0);
-		Bsel        : out std_logic_vector(1 downto 0)
+		Bsel        : out std_logic_vector(1 downto 0);
+		enable      : out std_logic
 	);
 end entity;
 
@@ -63,6 +64,7 @@ begin
     --wrMem_in(3 downto 0) <= funct3(1 downto 0) & res(1 downto 0);
 	process(opCode,funct7,funct3,res,reset) -- add reset
 	begin
+	    enable <= '1';
 	    if reset then -- reset
 			PC          <= '1'; -- have to reset PC
 			WriteEnable <= '0';

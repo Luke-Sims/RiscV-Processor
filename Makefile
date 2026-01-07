@@ -5,7 +5,7 @@
 
 GHDL=ghdl
 BUILD=build
-TB_FILE=tb_riscV
+TB_FILE=tb_RegInstr
 
 GHDLFLAGS= --workdir=$(BUILD)
 GHDLRUNFLAGS= --wave=sim/$(TB_FILE).ghw
@@ -13,7 +13,7 @@ GHDLRUNFLAGS= --wave=sim/$(TB_FILE).ghw
 TARGET = /usr/lib/ghdl/ieee/v93/std_logic_1164.o /usr/lib/ghdl/ieee/v93/std_logic_1164-body.o /usr/lib/ghdl/ieee/v93/numeric_std.o
 TARGET += /usr/lib/ghdl/ieee/v93/numeric_std-body.o /usr/lib/ghdl/std/v93/textio.o /usr/lib/ghdl/std/v93/textio-body.o
 TARGET += $(TB_FILE).o RiscV_package.o riscV.o ALU.o controleur.o PC.o IMEM.o REG.o Imm_ext.o RI_mux.o DMEM.o load_jump_mux.o
-TARGET += LM.o SM.o BC.o B_mux.o
+TARGET += LM.o SM.o BC.o B_mux.o registre_instruction.o
 
 DEPENDANCES = /usr/lib/ghdl/ieee/v93/std_logic_1164.o /usr/lib/ghdl/ieee/v93/numeric_std.o
 
@@ -87,6 +87,8 @@ BC.o: source/BC.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
 B_mux.o: source/B_mux.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
+registre_instruction.o: source/registre_instruction.vhd
+	$(GHDL) -a $(GHDLFLAGS) $<
 
 # Files dependences
 /usr/lib/ghdl/ieee/v93/std_logic_1164.o:
@@ -111,3 +113,4 @@ LM.o:                   $(DEPENDANCES)
 SM.o:                   $(DEPENDANCES)
 BC.o:                   $(DEPENDANCES)
 B_mux.o:                $(DEPENDANCES)
+registre_instruction.o: $(DEPENDANCES)

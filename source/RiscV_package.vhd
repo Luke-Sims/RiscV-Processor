@@ -43,7 +43,8 @@ package RiscV_package is
     		insType     : out std_logic_vector(2 downto 0);
     		SM_instr    : out std_logic_vector(1 downto 0);
     		Btype       : out std_logic_vector(2 downto 0);
-            Bsel        : out std_logic_vector(1 downto 0)
+            Bsel        : out std_logic_vector(1 downto 0);
+            enable      : out std_logic
     	);
     end component;
 
@@ -74,7 +75,8 @@ package RiscV_package is
         );
         port (
             addr	: in std_logic_vector((ADDR_WIDTH - 1) downto 0);
-    		q		: out std_logic_vector((DATA_WIDTH -1) downto 0)
+            clk     : in std_logic;
+    		q		: out std_logic_vector((ADDR_WIDTH -1) downto 0)
         );
 
     end component;
@@ -204,5 +206,16 @@ package RiscV_package is
             Bsel    : in std_logic_vector(1 downto 0);
             busAout : out std_logic_vector(N-1 downto 0)
         );
+    end component;
+
+    component registre_instruction is
+    generic(
+        N : natural := 32
+    );
+    port (
+        enable    : in std_logic;
+        instr_in  : in std_logic_vector(N-1 downto 0);
+        instr_out : out std_logic_vector(N-1 downto 0)
+    );
     end component;
 end package;

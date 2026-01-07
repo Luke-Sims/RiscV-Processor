@@ -19,7 +19,8 @@ generic
 	port
 	(
 		addr	: in std_logic_vector((ADDR_WIDTH - 1) downto 0);
-		q		: out std_logic_vector((DATA_WIDTH -1) downto 0)
+		clk     : in std_logic;
+		q		: out std_logic_vector((ADDR_WIDTH -1) downto 0)
 	);
 
 end entity;
@@ -27,9 +28,9 @@ end entity;
 architecture rtl of IMEM is
 
 	-- Build a 2-D array type for the ROM
-	subtype word_t is std_logic_vector((DATA_WIDTH-1) downto 0);
- --type    memType is array (0 to 2**ADDR_WIDTH - 1) of std_logic_vector(DATA_WIDTH - 1 downto 0);
-    type    memType is array (0 to MEM_DEPTH - 1) of std_logic_vector(DATA_WIDTH - 1 downto 0);
+	subtype word_t is std_logic_vector((ADDR_WIDTH-1) downto 0);
+ --type    memType is array (0 to 2**ADDR_WIDTH - 1) of std_logic_vector(ADDR_WIDTH - 1 downto 0);
+    type    memType is array (0 to MEM_DEPTH - 1) of std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
     -- fonction conversion chaîne hexadecimale en std_logic_vector
     function str_to_slv(str : string) return std_logic_vector is
@@ -83,14 +84,18 @@ begin
 
 
     ---- synchronous reading
-    --process (clk)
-    --begin
-    --    if rising_edge(clk) then
-    --        instr   <=  mem(to_integer(pc(dataWidth-1 downto 2)));
-    --    end if;
-    --end process;
+    process (clk)
+    begin
+        if rising_edge(clk)  then
+            if to_integer(unsigned(addr)/4) < MEM_DEPTH then
+                q   <=  mem(to_integer(unsigned(addr(ADDR_WIDTH-1 downto 2))));
+            else
+                q   <=  (others => '0');
+            end if;
+        end if;
+    end process;
 
     -- asynchronous reading
 
-    q   <=  mem(to_integer(unsigned(addr)/4)) when to_integer(unsigned(addr)/4) < MEM_DEPTH else (others => '0');
+    --q   <=  mem(to_integer(unsigned(addr)/4)) when to_integer(unsigned(addr)/4) < MEM_DEPTH else (others => '0');
 end rtl;
