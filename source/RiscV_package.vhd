@@ -44,7 +44,8 @@ package RiscV_package is
     		SM_instr    : out std_logic_vector(1 downto 0);
     		Btype       : out std_logic_vector(2 downto 0);
             Bsel        : out std_logic_vector(1 downto 0);
-            enable      : out std_logic
+            RI_enable   : out std_logic;
+            PC_enable   : out std_logic
     	);
     end component;
 
@@ -60,6 +61,7 @@ package RiscV_package is
     		data	: in std_logic_vector((N - 1) downto 0);
     		we		: in std_logic;
     		reset   : in boolean;
+            enable  : in std_logic;
     		PC4		: out std_logic_vector((N - 1) downto 0);
             q		: out std_logic_vector((N - 1) downto 0)
     	);

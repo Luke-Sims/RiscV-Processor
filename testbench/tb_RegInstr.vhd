@@ -43,13 +43,15 @@ begin
     begin
         instr_in <= x"DEADBEEF";
         enable <= '0';
-        wait for 5 ns;
+        wait until RISING_EDGE(clk_tb);
         instr_in <=x"CAFEBABE";
-        wait for 20 ns;
+        wait until RISING_EDGE(clk_tb);
+        wait until RISING_EDGE(clk_tb);
         enable <= '1';
-        wait for 10 ns;
+        wait until RISING_EDGE(clk_tb);
         instr_in <= x"CAFECACA";
-        wait for 30 ns;
+        wait until RISING_EDGE(clk_tb);
+        wait until RISING_EDGE(clk_tb);
         finish <= '1';
     end process;
 

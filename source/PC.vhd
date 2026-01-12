@@ -18,6 +18,7 @@ entity PC is
 		data	: in std_logic_vector((N - 1) downto 0);
 		we		: in std_logic;
 		reset   : in boolean;
+		enable  : in std_logic;
 		PC4     : out std_logic_vector((N - 1) downto 0);
 		q		: out std_logic_vector((N - 1) downto 0)
 	);
@@ -25,13 +26,13 @@ entity PC is
 end entity;
 
 architecture rtl of PC is
-	 signal PC_val : std_logic_vector((N - 1) downto 0);
+	 signal PC_val : std_logic_vector((N - 1) downto 0):= (others => '0');
 begin
 	process(clk,reset)
 	begin
         if reset then
             PC_val <= std_logic_vector(to_unsigned(0, N));
-		elsif(rising_edge(clk)) then
+		elsif(rising_edge(clk) and enable='1') then
 			if(we = '1') then
 				PC_val <= data;
 			else
