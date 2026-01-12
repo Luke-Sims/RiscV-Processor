@@ -78,7 +78,7 @@ architecture rtl of DMEM is
     end function;
 
     signal  mem      : memType := memInit(INIT_FILE);
-    signal mem_0    : std_logic_vector(ADDR_WIDTH -1 downto 0);
+    signal mem_0    : std_logic_vector(ADDR_WIDTH -1 downto 0) := (others => '0');
     signal temp     : natural range 0 to MEM_DEPTH-1;
 begin
     mem_0 <= addr(ADDR_WIDTH -1 downto 2)&"00";
