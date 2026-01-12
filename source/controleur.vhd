@@ -20,12 +20,15 @@ entity controleur is
 		aluOp		: out std_logic_vector(3 downto 0);
 		PC			: out std_logic:= '0';
 		RI_sel      : out std_logic;
-		load        : out std_logic;
+		loadAccJump : out std_logic_vector(1 downto 0);
 		wrMem       : out std_logic_vector(3 downto 0);
 		LM_instr    : out std_logic_vector(2 downto 0);
-		insType     : out std_logic_vector(1 downto 0);
+		insType     : out std_logic_vector(2 downto 0);
 		SM_instr    : out std_logic_vector(1 downto 0);
-		Btype       : out std_logic_vector(2 downto 0)
+		Btype       : out std_logic_vector(2 downto 0);
+		Bsel        : out std_logic_vector(1 downto 0);
+		RI_enable   : out std_logic;
+		PC_enable   : out std_logic
 	);
 end entity;
 
@@ -54,7 +57,7 @@ architecture rtl of controleur is
     				return "0000";
     		end case;
     end function;
-    --*/
+
     alias funct7: std_logic_vector(6 downto 0) is instr(31 downto 25);
 	alias funct3: std_logic_vector(2 downto 0) is instr(14 downto 12);
 	alias opCode: std_logic_vector(6 downto 0) is instr(6 downto 0);
@@ -62,64 +65,110 @@ begin
     --wrMem_in(3 downto 0) <= funct3(1 downto 0) & res(1 downto 0);
 	process(opCode,funct7,funct3,res,reset) -- add reset
 	begin
+	    RI_enable <= '1';
+		PC_enable <= '1';
 	    if reset then -- reset
-			PC          <= '0';
+			PC          <= '1'; -- have to reset PC
 			WriteEnable <= '0';
 			RI_sel      <= '0';
-			load        <= '1';
+			loadAccJump <= "00";
 			wrMem       <= "0000";
-			insType     <= "00";
+			insType     <= "000";
 			LM_instr    <= "000";
 			SM_instr    <= "00";
 			Btype       <= "000";
+			Bsel        <= "00";
 		elsif (opCode = "0110011") then -- R
 			aluOp 		<= funct7(5) & funct3;
 			PC 			<= '0';
 			WriteEnable <= '1';
 			RI_sel      <= '0';
-			load        <= '0';
+			loadAccJump <= "00";
 			wrMem       <= "0000";
+			Bsel        <= "00";
 		elsif (opCode = "0010011") then -- I
 		    aluOp 		<= '0' & funct3;
 			PC          <= '0';
 			WriteEnable <= '1';
 			RI_sel      <= '1';
-			load        <= '0';
+			loadAccJump <= "00";
 			wrMem       <= "0000";
-			insType     <= "00";
-		elsif (opCode = "0000011") then -- Load
+			insType     <= "000";
+			Bsel        <= "00";
+		elsif (opCode = "0000011") then -- load
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
             WriteEnable <= '1';
             RI_sel      <= '1';
-            load        <= '1';
-            insType     <= "00"; -- peut être inutile
+            loadAccJump <= "01";
+            insType     <= "000"; -- peut être inutile
             wrMem       <= "0000"; -- n'écrit pas en mémoire car ne fait que la lire
             LM_instr    <= funct3;
+            Bsel        <= "00";
         elsif (opCode = "0100011") then -- Store
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
             PC          <= '0';
             WriteEnable <= '0';
             RI_sel      <= '1';
-            load        <= '1';
+            loadAccJump <= "01";
             wrMem       <= wrmem_case(store_instr => funct3(1 downto 0), res_store => res);
-            insType     <= "01";
+            insType     <= "001";
             SM_instr    <= funct3(1 downto 0);
+            Bsel        <= "00";
         elsif (opCode = "1100011") then -- Branch
             aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
-            PC          <= '0';
+            PC          <= Bres;
             WriteEnable <= '0';
             RI_sel      <= '1';
-            load        <= Bres;
+            loadAccJump <= "00";
             wrMem       <= "0000";
-            insType     <= "10";
+            insType     <= "010";
+            Bsel        <= "01";
+            Btype       <= funct3;
+        elsif (opCode = "1101111") then -- JAL
+            aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
+            PC          <= '1';
+            WriteEnable <= '1';
+            RI_sel      <= '1';
+            loadAccJump <= "10";
+            wrMem       <= "0000";
+            insType     <= "011";
+            Bsel        <= "01";
+        elsif (opCode = "1100111") then -- JALR
+            aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
+            PC          <= '1';
+            WriteEnable <= '1';
+            RI_sel      <= '1';
+            loadAccJump <= "10";
+            wrMem       <= "0000";
+            insType     <= "000";
+            Bsel        <= "00";
+        elsif (opCode = "0110111") then -- LUI
+            aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
+            PC          <= '0';
+            WriteEnable <= '1';
+            RI_sel      <= '1';
+            loadAccJump <= "00";
+            wrMem       <= "0000";
+            insType     <= "100";
+            Bsel        <= "10";
+        elsif (opCode = "0010111") then -- AUIPC
+            aluOp 		<= "0000"; -- réalise un add avec le registre d'offset (RB)
+            PC          <= '0';
+            WriteEnable <= '1';
+            RI_sel      <= '1';
+            loadAccJump <= "00";
+            wrMem       <= "0000";
+            insType     <= "100";
+            Bsel        <= "01";
 		else
 			aluOp		<= "1111";
 			PC 			<= '0';
 			WriteEnable <= '0';
 			RI_sel      <= '0';
-			load        <= '0';
+			loadAccJump <= "00";
 			wrMem       <= "0000";
+			Bsel        <= "00";
 		end if;
 	end process;
 end rtl;

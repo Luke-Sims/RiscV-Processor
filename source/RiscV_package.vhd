@@ -37,16 +37,19 @@ package RiscV_package is
     		aluOp		: out std_logic_vector(3 downto 0);
     		PC			: out std_logic:= '0';
     		RI_sel      : out std_logic;
-    		load        : out std_logic;
+    		loadAccJump : out std_logic_vector(1 downto 0);
     		wrMem       : out std_logic_vector(3 downto 0);
     		LM_instr    : out std_logic_vector(2 downto 0);
-    		insType     : out std_logic_vector(1 downto 0);
+    		insType     : out std_logic_vector(2 downto 0);
     		SM_instr    : out std_logic_vector(1 downto 0);
-    		Btype       : out std_logic_vector(2 downto 0)
+    		Btype       : out std_logic_vector(2 downto 0);
+            Bsel        : out std_logic_vector(1 downto 0);
+            RI_enable   : out std_logic;
+            PC_enable   : out std_logic
     	);
     end component;
 
-    component single_port_pc is
+    component PC is
         generic
     	(
     		N : natural := 32
@@ -56,13 +59,15 @@ package RiscV_package is
     	(
     		clk		: in std_logic;
     		data	: in std_logic_vector((N - 1) downto 0);
-    		we		: in std_logic := '1';
+    		we		: in std_logic;
     		reset   : in boolean;
-    		q		: out std_logic_vector((N - 1) downto 0)
+            enable  : in std_logic;
+    		PC4		: out std_logic_vector((N - 1) downto 0);
+            q		: out std_logic_vector((N - 1) downto 0)
     	);
     end component;
 
-    component single_port_rom is
+    component IMEM is
 
         generic(
             DATA_WIDTH  :   natural;
@@ -72,12 +77,13 @@ package RiscV_package is
         );
         port (
             addr	: in std_logic_vector((ADDR_WIDTH - 1) downto 0);
-    		q		: out std_logic_vector((DATA_WIDTH -1) downto 0)
+            clk     : in std_logic;
+    		q		: out std_logic_vector((ADDR_WIDTH -1) downto 0)
         );
 
     end component;
 
-    component single_port_register is
+    component REG is
         generic
     	(
     		N       : natural := 32;
@@ -104,7 +110,7 @@ package RiscV_package is
     );
     port (
         instr    : in std_logic_vector(N -1 downto 0);
-        insType  : in std_logic_vector(1 downto 0); -- 00 si I, 01 si S, 10 si B
+        insType  : in std_logic_vector(2 downto 0); -- 000 si I ou JALR, 001 si S, 010 si B, 011 si JAL, 100 si U
         immExt   : out std_logic_vector(N -1 downto 0)
     );
     end component;
@@ -121,14 +127,15 @@ package RiscV_package is
         );
     end component;
 
-    component load_mux is
+    component load_jump_mux is
         generic(
             N : natural := 32
         );
         port (
             busA : in std_logic_vector(N-1 downto 0);
             busB : in std_logic_vector(N-1 downto 0);
-            load : in std_logic;
+            PC4  : in std_logic_vector(N-1 downto 0);
+            load : in std_logic_vector(1 downto 0);
             res  : out std_logic_vector(N-1 downto 0)
         );
     end component;
@@ -175,5 +182,42 @@ package RiscV_package is
             q        : in std_logic_vector(N-1 downto 0);
             data_out : out std_logic_vector(N-1 downto 0)
         );
+    end component;
+
+    component BC is
+    	generic
+    	(
+    		N : natural := 32
+    	);
+    	port
+    	(
+    		busA	: in  std_logic_vector((N -1) downto 0);
+    		busB	: in  std_logic_vector((N -1) downto 0);
+    		Btype	: in  std_logic_vector(2 downto 0);
+    		Bres	: out std_logic
+    	);
+    end component;
+
+    component B_mux is
+        generic(
+            N : natural := 32
+        );
+        port (
+            busA    : in std_logic_vector(N-1 downto 0);
+            dout    : in std_logic_vector(N-1 downto 0);
+            Bsel    : in std_logic_vector(1 downto 0);
+            busAout : out std_logic_vector(N-1 downto 0)
+        );
+    end component;
+
+    component registre_instruction is
+    generic(
+        N : natural := 32
+    );
+    port (
+        enable    : in std_logic;
+        instr_in  : in std_logic_vector(N-1 downto 0);
+        instr_out : out std_logic_vector(N-1 downto 0)
+    );
     end component;
 end package;

@@ -1,0 +1,10 @@
+build/
+scripts/
+sim/
+*.txt
+*.png
+*.qpf
+*.qsf
+*.rpt
+*.o
+tb_riscv
