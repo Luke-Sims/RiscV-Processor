@@ -8,7 +8,7 @@ entity tb_riscV is
         DATA_WIDTH      : natural := 32;
         ADDR_WIDTH      : natural := 32;
         MEM_DEPTH	    : natural := 1000;
-        INIT_FILE       : string  := "scripts/blt_02.hex";
+        INIT_FILE       : string  := "scripts/or_02.hex";
         INIT_FILE_MEM   : string  := "scripts/init_mem.hex";
         REG_NUM         : natural := 5
     );

@@ -13,7 +13,7 @@ entity ALU is
 	(
 		opA			: in  std_logic_vector((N -1) downto 0);
 		opB			: in  std_logic_vector((N -1) downto 0);
-		aluOp			: in  std_logic_vector(3 downto 0);
+		aluOp		: in  std_logic_vector(3 downto 0);
 		res			: out std_logic_vector((N -1) downto 0)
 	);
 
