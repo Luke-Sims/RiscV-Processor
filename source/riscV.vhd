@@ -48,6 +48,7 @@ architecture rtl of riscV is
     signal instrOut_t   : std_logic_vector((ADDR_WIDTH-1) downto 0);
     signal RI_enable_t  : std_logic;
     signal PC_enable_t  : std_logic;
+    signal reset_EOF_t  : boolean;
 
     alias funct7    : std_logic_vector(6 downto 0) is instrOut_t(31 downto 25);
    	alias funct3    : std_logic_vector(2 downto 0) is instrOut_t(14 downto 12);
@@ -89,7 +90,7 @@ begin
         Bres        => Bres_t,
         Btype       => Btype_t,
         Bsel        => Bsel_t,
-        reset       => reset,
+        reset       => reset_EOF_t,
         RI_enable   => RI_enable_t,
         PC_enable   => PC_enable_t
     );
@@ -102,7 +103,7 @@ begin
         clk   => clk,
         data  => res_t,
         we    => load_t,
-        reset => reset,
+        reset => reset_EOF_t,
         enable=> PC_enable_t,
         PC4   => PC4_t,
         q     => dout_t
@@ -135,7 +136,7 @@ begin
         rb      => rb_t,
         busA    => opA_in_t,
         busB    => opB_in_t,
-        reset   => reset
+        reset   => reset_EOF_t
     );
 
     Imm_ext_map: Imm_ext
@@ -239,6 +240,8 @@ begin
     port map(
         enable    => RI_enable_t,
         instr_in  => instrIn_t,
-        instr_out => instrOut_t
+        instr_out => instrOut_t,
+        reset     => reset,
+        reset_EOF => reset_EOF_t
     );
 end architecture rtl;

@@ -76,6 +76,9 @@ architecture rtl of IMEM is
             inst_num := inst_num + 1;
         end loop;
         file_close(filePtr);
+        instr_init := str_to_slv("00000000");
+        mem_tmp(inst_num) := instr_init;
+        inst_num := inst_num + 1;
         return mem_tmp;
     end function;
 

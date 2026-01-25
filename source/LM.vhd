@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+-- TODO: Fix warnings
 entity LM is
     generic(
         N : natural
@@ -15,8 +15,8 @@ entity LM is
 end entity;
 
 architecture rtl of LM is
-    signal res_h : std_logic_vector(N-1 downto 0);
-    signal res_b : std_logic_vector(N-1 downto 0);
+    signal res_h : std_logic_vector(N-1 downto 0) := (others => '0');
+    signal res_b : std_logic_vector(N-1 downto 0) := (others => '0');
 begin
 
     with LM_res(1) select  -- res_h(15:0)
@@ -25,7 +25,7 @@ begin
 
     with LM_res(0) select
         res_b(7 downto 0) <= res_h(15 downto 8) when '1',
-                             res_h(7 downto 0)   when others;
+                             res_h(7 downto 0)  when others;
 
     process (res_h,res_b,LM_res,funct3)
     begin

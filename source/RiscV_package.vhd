@@ -217,7 +217,9 @@ package RiscV_package is
     port (
         enable    : in std_logic;
         instr_in  : in std_logic_vector(N-1 downto 0);
-        instr_out : out std_logic_vector(N-1 downto 0)
+        reset     : in boolean;
+        instr_out : out std_logic_vector(N-1 downto 0);
+        reset_EOF : out boolean
     );
     end component;
 end package;
