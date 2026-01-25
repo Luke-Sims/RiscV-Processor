@@ -44,6 +44,12 @@ begin
                     res_h(31 downto 16) <= (others => '0');
                 end if;
                 to_load_mux <= res_h;
+            when "100" => -- LBU
+                res_b(31 downto 8) <= (others => '0');
+                to_load_mux <= res_b;
+            when "101" => -- LHU
+                res_h(31 downto 16) <= (others => '0');
+                to_load_mux <= res_h;
             when others => -- LW
                 to_load_mux <= data;
         end case;
