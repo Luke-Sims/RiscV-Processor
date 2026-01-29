@@ -36,7 +36,7 @@ architecture rtl of riscV is
     signal data_t       : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal busW_t       : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal DMEM_addr_t  : std_logic_vector((DATA_WIDTH -1) downto 0);
-    signal DMEM_in_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
+    -- signal DMEM_in_t    : std_logic_vector((DATA_WIDTH -1) downto 0);
     signal LM_instr_t   : std_logic_vector(2 downto 0);
     signal to_load_mux_t: std_logic_vector((DATA_WIDTH -1) downto 0);
     signal insType_t    : std_logic_vector(2 downto 0);
@@ -170,7 +170,7 @@ begin
     )
      port map(
         addr => DMEM_addr_t,
-        data => DMEM_in_t,
+        data => opB_in_t,
         q    => data_t,
         clk  => clk,
         we   => wrMem_t
@@ -199,17 +199,6 @@ begin
         to_load_mux => to_load_mux_t
     );
 
-    SM_map: SM
-    generic map(
-        N => DATA_WIDTH
-    )
-    port map(
-        SM_res  => LM_res_t,
-        BusB    => opB_in_t,
-        funct3  => SM_instr_t,
-        q       => data_t,
-        data_out=> DMEM_in_t
-    );
 
     BC_map: BC
     generic map(

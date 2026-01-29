@@ -8,7 +8,7 @@ entity tb_riscV is
         DATA_WIDTH      : natural := 32;
         ADDR_WIDTH      : natural := 32;
         MEM_DEPTH	    : natural := 1000;
-        INIT_FILE       : string  := "scripts/load_03.hex";
+        INIT_FILE       : string  := "scripts/store_02.hex";
         INIT_FILE_MEM   : string  := "scripts/init_mem.hex";
         REG_NUM         : natural := 5
     );
@@ -59,7 +59,7 @@ begin
         wait until RISING_EDGE(clk_tb);
         reset_tb <= false;
 
-        wait for 1500 ns;
+        wait for 2000 ns;
         reset_tb <= true;
         wait for 30 ns;
         finish <= '1';

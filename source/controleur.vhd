@@ -86,6 +86,7 @@ begin
             RI_enable <= '1';
             state     <= "000";
             WriteEnable <= '0';
+            wrMem       <= "0000";
             --Bsel        <= "10"; -- pk ?
 
 	    elsif (RISING_EDGE(clk) and state = "000") then --- DECODE
